@@ -113,7 +113,6 @@ class NeuralNetwork:
                 target = sample[3]
                 hidden_output, output = self.forward(x)
                 mse += self.backward(x, hidden_output, output, target)
-            #Адаптивная скорость обучения у себя не делал хоть у тебя потыаюсь
             mse /= len(self.normalized_dataset)
             if era % 100 == 0:
                 print(f"Эпоха {era:5d}, MSE: {mse:.6f}, LR: {self.lr:.4f}")
@@ -124,7 +123,7 @@ class NeuralNetwork:
     # ------------------------------------------------------------
     # Предсказание
     # ------------------------------------------------------------
-    #Эта херня для денормализации(тесты и валидация)
+    #Для денормализации(тесты и валидация)
     def predict(self, a, b, c):
         x = np.array([a, b, c])
         x_norm = (x - self.input_means) / self.input_stds
@@ -152,16 +151,24 @@ if __name__ == "__main__":
     print("Bias H:", hiddenBias, "Bias O:", outputBias)
 
     myAI = NeuralNetwork(hiddenWeights, outputWeights, hiddenBias, outputBias, requestedEra=2000)
-    myAI.readFromCsv("discriminant_data.csv")
+    myAI.readFromCsv("discriminant_data_3.csv")
     myAI.train()
 
     print("\nТестирование:")
+    # test_cases = [
+    #     (1, 2, 1),
+    #     (1, 5, 1),
+    #     (2, 4, 1),
+    #     (0.5, 3, 2),
+    #     (4, 4, 4)
+    # ]
+
     test_cases = [
-        (1, 2, 1),
-        (1, 5, 1),
-        (2, 4, 1),
-        (0.5, 3, 2),
-        (4, 4, 4)
+        (5.61478811062392, 68.47622120462377, 36.24445585206049),
+        (69.9002065933079, 24.549362104375323, 14.301768725511709),
+        (5.569494176827933, 83.73941658515918, 70.18158589106298),
+        (3.4891985338090854, 12.212755486160841, 66.48070854382573),
+        (48.54349226782931, 16.09995891170176, 21.474717895489515)
     ]
     for a, b, c in test_cases:
         pred = myAI.predict(a, b, c)
